@@ -1,35 +1,23 @@
-// Why this file: centralize fetch logic & error handling
+const BASE = import.meta.env.VITE_API_BASE || ''; // dev: '', prod: Render URL
+
 export async function listTodos() {
-  const res = await fetch('/api/todos'); // Vite proxy forwards to backend
-  if (!res.ok) throw new Error('Failed to load todos');
-  return res.json(); // [{id,title,completed,created_at}, ...]
+  const r = await fetch(`${BASE}/todos`);
+  if (!r.ok) throw new Error('Failed to load todos');
+  return r.json();
 }
 
 export async function createTodo(title) {
-  const res = await fetch('/api/todos', {
+  const r = await fetch(`${BASE}/todos`, {
     method: 'POST',
-    headers: { 'Content-Type':'application/json' },
-    body: JSON.stringify({ title }), // backend expects {title}
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title }),
   });
-
-  if (res.status === 400) {
-    const body = await res.json();      // e.g., { error: 'title required' }
-    throw new Error(body.error || 'Bad request');
-  }
-  if (!res.ok) throw new Error('Failed to create todo');
-  return res.json(); // created row from DB (includes created_at)
+  if (!r.ok) throw new Error('Failed to create');
+  return r.json();
 }
 
 export async function toggleTodo(id) {
-  const res = await fetch(`/api/todos/${id}/toggle`, { method: 'PATCH' });
-  if (res.status === 404) throw new Error('Not found');
-  if (!res.ok) throw new Error('Failed to toggle');
-  return res.json();                       // updated row { id, title, completed, created_at }
-}
-
-export async function deleteTodo(id) {
-  const res = await fetch(`/api/todos/${id}`, { method: 'DELETE' });
-  if (res.status === 404) throw new Error('Not found');
-  if (!res.ok) throw new Error('Failed to delete');
-  return res.json(); // deleted row (contains the id)
+  const r = await fetch(`${BASE}/todos/${id}/toggle`, { method: 'PATCH' });
+  if (!r.ok) throw new Error('Failed to toggle');
+  return r.json();
 }
