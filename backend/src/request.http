@@ -1,0 +1,27 @@
+### Health
+GET http://localhost:3000/health
+
+### List todos
+GET http://localhost:3000/todos
+
+### Add todo
+POST http://localhost:3000/todos
+Content-Type: application/json
+
+{ "title": "Buy milk" }
+
+
+### List to get the id
+GET http://localhost:3000/todos
+
+### Toggle (paste the id below)
+PATCH http://localhost:3000/todos/{90bb4cbb-bb84-476f-9a66-dc2a6405bd87}/toggle
+
+### Confirm flipped
+GET http://localhost:3000/todos
+
+### Toggle back
+PATCH http://localhost:3000/todos/{90bb4cbb-bb84-476f-9a66-dc2a6405bd87}/toggle
+
+### delete
+DELETE http://localhost:3000/todos/{90bb4cbb-bb84-476f-9a66-dc2a6405bd87}
